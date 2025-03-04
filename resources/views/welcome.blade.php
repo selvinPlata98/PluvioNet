@@ -1,6 +1,6 @@
 @extends('layout/plantilla')
 
-@section('tituloPagina', 'Gestion de proyectos')
+@section('tituloPagina', 'Pagina Principal')
 @section('contenido')
 
 
