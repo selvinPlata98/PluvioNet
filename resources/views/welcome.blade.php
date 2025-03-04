@@ -1,9 +1,9 @@
 @extends('layout/plantilla')
 
-@section('tituloPagina', 'Gestion de proyectos')
+@section('tituloPagina', 'Pagina Principal')
 @section('contenido')
 
-
+<p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Facilis maiores tempore veritatis itaque voluptatibus ducimus deleniti rerum sed quibusdam, repellendus, delectus tenetur possimus corporis in, vero quod. Est, nemo illum?</p>
 <div class="container">
             <h1 class="display-4">Construye tu propio Pluviómetro Digital</h1>
             <p class="lead">Descubre cómo medir la cantidad de lluvia con un dispositivo hecho con Arduino. ¡Un proyecto educativo y práctico!</p>
