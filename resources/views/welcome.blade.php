@@ -7,7 +7,7 @@
 <div class="container">
             <h1 class="display-4">Construye tu propio Pluviómetro Digital</h1>
             <p class="lead">Descubre cómo medir la cantidad de lluvia con un dispositivo hecho con Arduino. ¡Un proyecto educativo y práctico!</p>
-            <a href="#proyecto" class="btn btn-primary btn-lg">Explorar el Proyecto</a>
+            <a href="#proyecto" class=" btn-primary">Explorar el Proyecto</a>
         </div>
     </header>
 
