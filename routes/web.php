@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\PlantallaPrincipalController;
+use App\Http\Controllers\EstadisticaController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +16,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('welcome');
+});*/
+Route::get('/', function () {
+    return redirect('/mediciones'); // Redirige a la lista de proyectos
 });
+
+Route::resource('mediciones', PlantallaPrincipalController::class);
+
+Route::get('/estadisticas', [EstadisticaController::class, 'index'])
+    ->name('estadistica');
