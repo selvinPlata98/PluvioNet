@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imagen con Texto Elegante</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: 'Arial', sans-serif;
+            padding: 20px;
+        }
+        
+        .container {
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+        }
+        
+        #canvas-container {
+            margin: 20px 0;
+            border: 1px solid #ddd;
+            background-color: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        
+        canvas {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        /* Importar fuente bonita de Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;700&family=Dancing+Script:wght@700&family=Pacifico&family=Playball&display=swap');
+        
+        .control-group {
+            margin: 15px 0;
+            padding: 15px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        .preview-text {
+            font-size: 1.5rem;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Generador de Imagen con Texto</h1>
+        
+        <div class="control-group">
+            <label for="textoInput">Tu texto:</label>
+            <input type="text" id="textoInput" value="Texto Elegante" oninput="actualizarTexto()">
+            
+            <div class="preview-text" id="textoPreview">Texto Elegante</div>
+        </div>
+        
+        <div class="control-group">
+            <label for="fuentes">Selecciona una fuente:</label>
+            <select id="fuentes" onchange="cambiarFuente()">
+                <option value="'Great Vibes', cursive">Great Vibes</option>
+                <option value="'Dancing Script', cursive">Dancing Script</option>
+                <option value="'Pacifico', cursive">Pacifico</option>
+                <option value="'Playball', cursive">Playball</option>
+                <option value="'Montserrat', sans-serif">Montserrat</option>
+                <option value="'Arial', sans-serif">Arial</option>
+            </select>
+        </div>
+        
+        <div class="control-group">
+            <label for="colorTexto">Color del texto:</label>
+            <input type="color" id="colorTexto" value="#ff3366" onchange="cambiarColor()">
+        </div>
+        
+        <div class="control-group">
+            <label>Tamaño para descarga:</label>
+            <select id="tamanoDescarga">
+                <option value="1200">Grande (1200x600px)</option>
+                <option value="1600" selected>Muy Grande (1600x800px)</option>
+                <option value="2000">Enorme (2000x1000px)</option>
+            </select>
+        </div>
+        
+        <div id="canvas-container">
+            <p>Vista previa:</p>
+            <canvas id="miCanvas" width="800" height="400"></canvas>
+        </div>
+        
+        <button onclick="descargarImagen()">Descargar Imagen PNG</button>
+    </div>
+
+    <script>
+        // Inicializar canvas
+        const canvas = document.getElementById('miCanvas');
+        const ctx = canvas.getContext('2d');
+        const textoPreview = document.getElementById('textoPreview');
+        
+        // Configuración inicial
+        let texto = "Texto Elegante";
+        let fuente = "'Great Vibes', cursive";
+        let color = "#ff3366";
+        let tamanoFuentePreview = 80; // Tamaño de fuente para vista previa
+        
+        // Dibujar texto en el canvas
+        function dibujarTexto() {
+            // Limpiar canvas (con fondo transparente)
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Configurar estilo de texto
+            ctx.font = `bold ${tamanoFuentePreview}px ${fuente}`;
+            
+            // Crear gradiente para el texto
+            const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+            gradient.addColorStop(0, color);
+            gradient.addColorStop(1, ajustarBrillo(color, 20));
+            
+            ctx.fillStyle = gradient;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            
+            // Sombra para efecto 3D
+            ctx.shadowColor = "rgba(0, 0, 0, 0.3)";
+            ctx.shadowBlur = 5;
+            ctx.shadowOffsetX = 3;
+            ctx.shadowOffsetY = 3;
+            
+            // Dibujar texto
+            ctx.fillText(texto, canvas.width/2, canvas.height/2);
+            
+            // Resetear sombra
+            ctx.shadowColor = "transparent";
+            
+            // Actualizar vista previa de texto
+            textoPreview.textContent = texto;
+            textoPreview.style.fontFamily = fuente;
+            textoPreview.style.background = `linear-gradient(45deg, ${color}, ${ajustarBrillo(color, 20)})`;
+            textoPreview.style.webkitBackgroundClip = "text";
+            textoPreview.style.backgroundClip = "text";
+            textoPreview.style.color = "transparent";
+        }
+        
+        // Funciones de control
+        function cambiarFuente() {
+            fuente = document.getElementById('fuentes').value;
+            dibujarTexto();
+        }
+        
+        function cambiarColor() {
+            color = document.getElementById('colorTexto').value;
+            dibujarTexto();
+        }
+        
+        function actualizarTexto() {
+            texto = document.getElementById('textoInput').value;
+            dibujarTexto();
+        }
+        
+        // Función para ajustar brillo del color
+        function ajustarBrillo(hex, percent) {
+            // Convertir HEX a RGB
+            let r = parseInt(hex.substring(1,3), 16);
+            let g = parseInt(hex.substring(3,5), 16);
+            let b = parseInt(hex.substring(5,7), 16);
+
+            // Ajustar brillo
+            r = parseInt(r * (100 + percent) / 100);
+            g = parseInt(g * (100 + percent) / 100);
+            b = parseInt(b * (100 + percent) / 100);
+
+            r = (r<255)?r:255;
+            g = (g<255)?g:255;
+            b = (b<255)?b:255;
+
+            // Convertir de nuevo a HEX
+            return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+        }
+        
+        // Función para crear imagen de alta resolución
+        function crearImagenGrande() {
+            const tamano = parseInt(document.getElementById('tamanoDescarga').value);
+            const ancho = tamano;
+            const alto = tamano / 2;
+            
+            // Crear canvas temporal más grande
+            const canvasGrande = document.createElement('canvas');
+            canvasGrande.width = ancho;
+            canvasGrande.height = alto;
+            const ctxGrande = canvasGrande.getContext('2d');
+            
+            // Calcular tamaño de fuente proporcional
+            const tamanoFuente = tamano * 0.1; // 10% del ancho
+            
+            // Configurar estilo de texto
+            ctxGrande.font = `bold ${tamanoFuente}px ${fuente}`;
+            
+            // Crear gradiente para el texto
+            const gradient = ctxGrande.createLinearGradient(0, 0, ancho, 0);
+            gradient.addColorStop(0, color);
+            gradient.addColorStop(1, ajustarBrillo(color, 20));
+            
+            ctxGrande.fillStyle = gradient;
+            ctxGrande.textAlign = "center";
+            ctxGrande.textBaseline = "middle";
+            
+            // Sombra para efecto 3D
+            ctxGrande.shadowColor = "rgba(0, 0, 0, 0.3)";
+            ctxGrande.shadowBlur = tamano * 0.005;
+            ctxGrande.shadowOffsetX = tamano * 0.003;
+            ctxGrande.shadowOffsetY = tamano * 0.003;
+            
+            // Dibujar texto
+            ctxGrande.fillText(texto, ancho/2, alto/2);
+            
+            return canvasGrande;
+        }
+        
+        // Función para descargar la imagen
+        function descargarImagen() {
+            const canvasGrande = crearImagenGrande();
+            const link = document.createElement('a');
+            link.download = 'texto-elegante.png';
+            
+            // Crear imagen con fondo transparente
+            canvasGrande.toBlob(function(blob) {
+                link.href = URL.createObjectURL(blob);
+                link.click();
+            }, 'image/png', 1.0); // Calidad máxima
+        }
+        
+        // Inicializar
+        dibujarTexto();
+    </script>
+</body>
+</html>
