@@ -457,6 +457,7 @@
                     <tr>
                         <th class="ps-4">ID</th>
                         <th>Lluvia (mm)</th>
+                        <th>Lluvia (cm)</th>
                         <th>Ubicación</th>
                         <th class="pe-4">Fecha</th>
                     </tr>
@@ -468,6 +469,12 @@
                        
                         <td class="{{ $dato->cantidad_lluvia > 10 ? 'rain-high' : 'rain-low' }}">
                             {{ $dato->cantidad_lluvia }} mm
+                            @if($dato->cantidad_lluvia > 10)
+                            <i class="bi bi-exclamation-triangle-fill ms-2"></i>
+                            @endif
+                        </td>
+                        <td class="{{ $dato->cantidad_lluvia > 10 ? 'rain-high' : 'rain-low' }}">
+                            {{ $dato->cantidad_lluvia/10 }} cm
                             @if($dato->cantidad_lluvia > 10)
                             <i class="bi bi-exclamation-triangle-fill ms-2"></i>
                             @endif
@@ -670,41 +677,58 @@ $(document).ready(function() {
     }
 
     function initDateFilters() {
-        try {
-            const availableMonths = {!! json_encode($availableMonths) !!};
-            const availableYears = {!! json_encode($availableYears) !!};
-            const currentMonth = new Date().getMonth() + 1;
-            const currentYear = new Date().getFullYear();
+    try {
+        const availableMonths = {!! json_encode($availableMonths) !!};
+        const availableYears = {!! json_encode($availableYears) !!};
+        const currentMonth = new Date().getMonth() + 1;
+        const currentYear = new Date().getFullYear();
 
-            startMonthSelect.empty();
-            endMonthSelect.empty();
-            startYearSelect.empty();
-            endYearSelect.empty();
+        const startMonthSelect = $('#startMonth'); // Asegúrate de que el select tenga el ID "startMonth"
+        const endMonthSelect = $('#endMonth');     // Asegúrate de que el select tenga el ID "endMonth"
+        const startYearSelect = $('#startYear');   // Asegúrate de que el select tenga el ID "startYear"
+        const endYearSelect = $('#endYear');     // Asegúrate de que el select tenga el ID "endYear"
 
-            const monthNames = {
-                1: 'Enero', 2: 'Febrero', 3: 'Marzo', 4: 'Abril', 5: 'Mayo', 6: 'Junio',
-                7: 'Julio', 8: 'Agosto', 9: 'Septiembre', 10: 'Octubre', 11: 'Noviembre', 12: 'Diciembre'
-            };
+        const monthNames = {
+            1: 'Enero', 2: 'Febrero', 3: 'Marzo', 4: 'Abril', 5: 'Mayo', 6: 'Junio',
+            7: 'Julio', 8: 'Agosto', 9: 'Septiembre', 10: 'Octubre', 11: 'Noviembre', 12: 'Diciembre'
+        };
 
-            availableMonths.forEach(month => {
-                startMonthSelect.append(new Option(monthNames[month], month));
-                endMonthSelect.append(new Option(monthNames[month], month));
-            });
+        startMonthSelect.empty();
+        endMonthSelect.empty();
+        startYearSelect.empty();
+        endYearSelect.empty();
 
-            availableYears.forEach(year => {
-                startYearSelect.append(new Option(year, year));
-                endYearSelect.append(new Option(year, year));
-            });
+        $.each(availableMonths, function(index, month) {
+            startMonthSelect.append($('<option>', {
+                value: month,
+                text: monthNames[month]
+            }));
+            endMonthSelect.append($('<option>', {
+                value: month,
+                text: monthNames[month]
+            }));
+        });
 
-            startMonthSelect.val(currentMonth);
-            endMonthSelect.val(currentMonth);
-            startYearSelect.val(currentYear);
-            endYearSelect.val(currentYear);
+        $.each(availableYears, function(index, year) {
+            startYearSelect.append($('<option>', {
+                value: year,
+                text: year
+            }));
+            endYearSelect.append($('<option>', {
+                value: year,
+                text: year
+            }));
+        });
 
-        } catch (error) {
-            console.error('Error inicializando filtros:', error);
-        }
+        startMonthSelect.val(currentMonth);
+        endMonthSelect.val(currentMonth);
+        startYearSelect.val(currentYear);
+        endYearSelect.val(currentYear);
+
+    } catch (error) {
+        console.error('Error inicializando filtros:', error);
     }
+}
 
     initDateFilters();
 

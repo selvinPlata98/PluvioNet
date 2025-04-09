@@ -215,6 +215,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     </td>
                 </tr>
                 <tr>
+                    <td><i class="mdi mdi-weather-rainy me-2"></i> Lluvia</td>
+                    <td>
+                        <span style="color: #1565c0; font-weight: bold;">
+                            {{ (float) $ultimoDato->cantidad_lluvia/10 }} cm
+                        </span>
+                    </td>
+                </tr>
+                <tr>
                     <td><i class="mdi mdi-clock me-2"></i> Fecha</td>
                     <td>
                         <span style="color: #424242;">
